@@ -1,0 +1,90 @@
+---
+title: "Zev Birthday Ggplot"
+author: "Ana Bravo"
+format: html
+editor: visual
+---
+
+## Birthday Set up 
+
+```{r}
+
+library(ggimage)
+library(tidyverse)
+library(ggrepel)
+
+```
+
+
+```{r}
+
+# get data 
+
+ufo_sightings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-06-20/ufo_sightings.csv')
+
+places <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-06-20/places.csv')
+
+day_parts_map <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-06-20/day_parts_map.csv')
+
+
+```
+
+
+```{r}
+
+# make map 
+
+usa_plot <- ggplot()
+
+usa_plot
+
+# USA states
+states_map <- map_data("state")
+
+states_map
+
+# filter places data set - USA 
+places <- places |> 
+  filter(country %in% "USA" & !state %in% c("HI", "AK")) 
+
+ 
+# set image 
+
+places <- places |> 
+  add_column(image = "/Users/anabravo/Documents/GitHub/ana-blog/alien_png.png")
+
+
+# plot ggplot 
+
+usa_plot <- ggplot() + 
+  geom_polygon(data = states_map, 
+               aes(x = long, y = lat, fill = region, group = group), 
+               color = "white", fill = "black") +
+  geom_point(data = places, mapping = aes(x = longitude, y = latitude), 
+             color = "lightgreen", size = 0.005) +
+  theme(axis.text.x=element_blank(),
+      axis.ticks.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.line.x = element_blank(),
+      axis.line.y = element_blank(),
+      plot.title = element_text(hjust = 0.5),
+      plot.subtitle = element_text(hjust = 0.5),
+      panel.background = element_blank(),
+      ) +
+  labs(
+    x = "",
+    y = "",
+    title = "Map of Alien Sightings Across the United States",
+    subtitle = "this map presents a visual of the distribution of alien sightings across the U.S.\n this map is interesting because the majority of alien sightings seem to be located in\n highly populated areas such as New York."
+  )
+  
+  
+ 
+
+usa_plot
+
+
+
+```
+
